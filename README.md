@@ -1,4 +1,4 @@
-# Redis Inactivity Monitor 🛡️
+# Redis Inactivity Monitor
 
 ![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)
 ![Node.js](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
@@ -6,33 +6,15 @@
 
 > **Proof of Concept (PoC)**: Implementação do padrão *Expired Key Notification* para detecção de inatividade em tempo real.
 
-## 📖 Visão Geral
+## Visão Geral
 
 Este projeto demonstra como utilizar o **Redis Keyspace Notifications** para monitorar o tempo de inatividade de usuários em um chat. Em vez de realizar *polling* (consultas constantes) no banco de dados, utilizamos eventos disparados pelo próprio Redis quando uma chave expira.
 
-### Tags
-`#Redis` `#Backend` `#EventDriven` `#RealTime` `#Scalability` `#ChatSystems`
-
 ---
 
-## ⚙️ Funcionamento do Padrão
+## Funcionamento do Padrão
 
 1.  **Activity Tracking**: Sempre que o usuário envia uma mensagem, uma chave é criada/atualizada no Redis: `active:chat:{user_id}` com um **TTL** (ex: 5 minutos).
 2.  **Silent Countdown**: O Redis gerencia a contagem regressiva de forma nativa.
 3.  **Event Trigger**: Se o TTL chegar a zero, o Redis publica uma mensagem no canal `__keyevent@0__:expired`.
 4.  **Reaction**: O serviço *Listener* captura o ID do usuário e executa a lógica de encerramento de sessão ou alerta.
-
----
-
-## 🚀 Como Configurar
-
-### 1. Requisitos
-* Docker
-* Node.js (ou sua linguagem de preferência)
-
-### 2. Ativando Notificações no Redis
-Por padrão, o Redis desativa notificações de keyspace por economia de CPU. Para este projeto, habilitamos apenas eventos de **Expiração (Ex)**:
-
-```bash
-# Via terminal (com o Redis rodando)
-redis-cli CONFIG SET notify-keyspace-events Ex
