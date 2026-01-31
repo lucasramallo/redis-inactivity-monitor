@@ -4,7 +4,7 @@ services:
   redis:
     container_name: redis-inactivity-monitor
     image: redis:8.2-alpine
-    command: redis-server --requirepass $REDIS_PASSWORD
+    command: redis-server
     ports:
       - 6379:6379
     volumes:
